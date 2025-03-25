@@ -1,0 +1,17 @@
+[Desktop Entry]
+Type=Application
+TryExec=/opt/flameshot/bin/flameshot
+Exec=/opt/flameshot/bin/flameshot
+Icon=/opt/flameshot/share/icons/hicolor/128x128/apps/flameshot.png
+Terminal=false
+Categories=Graphics;Photography;Utility;
+Name=Flameshot
+GenericName=Screenshot Tool
+Comment=Powerful and easy-to-use screenshot software
+StartupWMClass=Flameshot
+Actions=New;
+
+[Desktop Action New]
+Name=Launch GUI
+Exec=flameshot gui
+

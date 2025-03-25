@@ -1,0 +1,17 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Extension Manager
+Comment=
+Exec=flatpak run com.mattjakeman.ExtensionManager
+Icon=/home/tallonea/.icons/candy-icons/apps/scalable/org.gnome.Extensions.svg
+Type=Application
+Categories=Development;Utility;GTK;gnome-shell;
+Keywords=gnome;shell;extension;extensions;gnome-shell-extension;
+StartupWMClass=extension-manager
+MimeType=x-scheme-handler/gnome-extensions;
+Terminal=false
+SingleMainWindow=true
+X-GNOME-UsesNotifications=true
+X-GNOME-SingleWindow=true
+X-Flatpak-RenamedFrom=com.mattjakeman.ExtensionManager

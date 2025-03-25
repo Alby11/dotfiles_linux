@@ -1,0 +1,9 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Type=Application
+Name=WhatsApp Web
+Exec=/opt/microsoft/msedge/microsoft-edge "--profile-directory=Profile 1" --app-id=hnpfjngllnobngcgfapefoaidbinmjnm --app-url=https://web.whatsapp.com/
+Icon=msedge-hnpfjngllnobngcgfapefoaidbinmjnm-Profile_1
+StartupWMClass=crx__hnpfjngllnobngcgfapefoaidbinmjnm
