@@ -1,0 +1,17 @@
+# Autocomplete function for protocols in mount_share function.
+function _mount_share() {
+  local cur prev opts base
+  COMPREPLY=()
+  cur="${COMP_WORDS[COMP_CWORD]}"
+  prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+  # Autocomplete for protocols.
+  if [[ ${prev} == "-p" ]] ; then
+      COMPREPLY=( $(compgen -W 'cifs nfs' -- ${cur}) )
+      return 0
+  fi
+
+  # Default autocomplete.
+  COMPREPLY=( $(compgen -F _mount_network_share -- ${cur}) )
+  return 0
+}

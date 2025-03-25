@@ -1,0 +1,16 @@
+# vim: filetype=zsh
+
+# Autocomplete script for killuser_except_shell
+_killuser_except_shell() {
+  _arguments '1: :_users' '*: :->default'
+
+  case $state in
+    default)
+      _message 'no more arguments'
+      ;;
+  esac
+}
+
+# Use built-in _users function for listing usernames
+compdef _killuser_except_shell killuser_except_shell
+

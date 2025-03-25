@@ -1,0 +1,8 @@
+# vim: filetype=zsh
+
+[[ -e $ZSH_DEBUG ]] && ZSH_DEBUG_LOG_STARTFILE "${(%):-%N}"
+
+# awscli autocomplete
+complete -C "$(which aws_completer)" aws
+
+[[ -e $ZSH_DEBUG ]] && ZSH_DEBUG_LOG_ENDFILE "${(%):-%N}"

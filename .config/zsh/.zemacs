@@ -1,0 +1,60 @@
+# vim: ft=zsh
+
+# NOTE: ZSH emacs key bindings
+
+ZSH_DEBUG_LOG_STARTFILE "${(%):-%N}"
+
+# Basic movement
+bindkey '^A' beginning-of-line        # Ctrl + a
+bindkey '^E' end-of-line              # Ctrl + e
+bindkey '^B' backward-char            # Ctrl + b
+bindkey '^F' forward-char             # Ctrl + f
+bindkey '^P' up-line-or-history       # Ctrl + p
+bindkey '^N' down-line-or-history     # Ctrl + n
+
+# Word movement
+bindkey '^[b' backward-word           # Alt + b
+bindkey '^[f' forward-word            # Alt + f
+
+# Deletion
+bindkey '^D' delete-char              # Ctrl + d
+bindkey '^W' backward-kill-word       # Ctrl + w
+# bindkey '^K' kill-line                # Ctrl + k TMUX/NVIM integration
+bindkey '^[K' kill-line                # Ctrl + k TMUX/NVIM integration
+# bindkey '^H' backward-delete-char     # Ctrl + k override TMUX/NVIM integration
+bindkey '^[H' backward-delete-char     # Ctrl + k override TMUX/NVIM integration
+bindkey '^[d' kill-word               # Alt + d
+
+# Undo
+bindkey '^_' undo                     # Ctrl + _
+
+# Transpose
+bindkey '^T' transpose-chars          # Ctrl + t
+
+# Yank (paste)
+bindkey '^[Y' yank                     # Ctrl + y
+
+# Enter
+# bindkey '^J' accept-line              # Ctrl + j
+bindkey '^[J' accept-line              # Ctrl + j
+
+# Clear screen
+# bindkey '^L' clear-screen             # Ctrl + l
+bindkey '^[L' clear-screen             # Ctrl + l
+
+# Search
+bindkey '^R' history-incremental-search-backward  # Ctrl + r
+bindkey '^S' history-incremental-search-forward   # Ctrl + s
+
+# Capitalization
+bindkey '^[u' upcase-word                         # Alt + u
+bindkey '^[l' downcase-word                       # Alt + l
+bindkey '^[c' capitalize-word                     # Alt + c
+
+# Transpose words
+bindkey '^[t' transpose-words                     # Alt + t
+
+# Kill to the end of the buffer
+bindkey '^U' kill-whole-line                      # Ctrl + u
+
+ZSH_DEBUG_LOG_ENDFILE "${(%):-%N}"

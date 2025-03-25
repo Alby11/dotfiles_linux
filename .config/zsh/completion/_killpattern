@@ -1,0 +1,23 @@
+# vim: filetype=zsh
+
+# Autocomplete script for killpattern
+_comp_killpattern() {
+  _arguments \
+    '1: :_processes' \
+    '*: :->default'
+
+  case $state in
+    default)
+      _message 'no more arguments'
+      ;;
+  esac
+}
+
+# List of running processes for autocompletion
+_processes() {
+  _call_program processes ps -eo comm | awk '{if(NR>1)print}'
+}
+
+# Attach the completion function to killpattern
+compdef _comp_killpattern killpattern
+

@@ -1,0 +1,47 @@
+# vim: ft=zsh
+
+#
+# NOTE: .zeditor - Zsh file loaded to export editor, visual, pager ...
+#
+
+[[ -e $ZSH_DEBUG ]] && ZSH_DEBUG_LOG_STARTFILE "${(%):-%N}"
+
+[[ ! $(command -v bat) ]] && \
+  # package_manager_install bat
+  echo "Bat is not installed. Please install it first." && return 1
+
+export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --preview 'bat --color=always --style=numbers --line-range=:500 {}'"
+
+batdiff() {
+    git diff --name-only --relative --diff-filter=d | xargs bat --diff
+}
+
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+alias bathelp='bat --plain --language=help'
+help() {
+    "$@" --help 2>&1 | bathelp
+}
+alias -g -- :h='-h 2>&1 | bat --language=help --style=plain'
+alias -g -- :help='--help 2>&1 | bat --language=help --style=plain'
+
+export BAT_PAGER="less -RF"
+
+bat cache --build > /dev/null 2>&1
+
+# Set the default editor, considering if it is available
+export EDITOR="nvim"
+export SYSTEMD_EDITOR="vim"
+export VISUAL="$EDITOR"
+export PAGER="less"
+export SYSTEMD_PAGER="$PAGER"
+export MANPAGER="$PAGER"
+
+[[ -n $EDITOR ]] && {
+  edit() {
+      $EDITOR "$@"
+  }
+  alias e='edit'
+}
+
+[[ -e $ZSH_DEBUG ]] && ZSH_DEBUG_LOG_ENDFILE "${(%):-%N}"

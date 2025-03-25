@@ -1,0 +1,75 @@
+# vim: ft=zsh
+#
+# NOTE: .zpath - Zsh PATH setup file
+#
+
+ZSH_DEBUG_LOG_STARTFILE "${(%):-%N}"
+
+# Ensure $ZDOTDIR/{completion,functions} directory exists
+mkdir -p "$ZDOTDIR"/{completion,functions}
+
+# Set the list of directories that zsh searches for commands.
+path=(
+  $HOME/{,s}bin(N)
+  $HOME/.local/{,s}bin(N)
+  $HOME/{.cargo,local}/{,s}bin(N)
+  $HOME/{,.}go/{,s}bin(N)
+  $HOME/.local/share/bob/nvim-{,s}bin(N)
+  $HOME/gitdepot/genesys_archy/(N)
+  /opt/{,s}bin(N)
+  /opt/flameshot/bin/(N)
+  /opt/{homebrew,local}/{,s}bin(N)
+  /usr/libexec/openssh/(N)
+  /usr/local/{,s}bin(N)
+  $path
+)
+
+fpath=(
+  $ZDOTDIR/{completion,functions}(N)
+  ${HOME}/.pyenv/completions(N)
+  $fpath
+)
+
+# Ensure path arrays do not contain duplicates.
+typeset -gU path fpath
+
+# Initialize the Zsh completion system
+autoload -Uz compinit promptinit
+compinit
+promptinit
+
+zmodload -i zsh/complist
+_comp_options+=(globdots) # Include hidden files in completion
+
+# Autoload all functions in $ZDOTDIR/functions
+autoload -Uz "$ZDOTDIR"/functions/*(.N)
+
+# source file with custom functions
+[[ -f $ZDOTDIR/.zfunctions ]] && source "$ZDOTDIR"/.zfunctions > /dev/null 2>&1
+
+# Function to manage dotfiles bare repo
+dotfiles() {
+  $(command -v git) --git-dir="${HOME}"/.dotfiles_git/ --work-tree="$HOME" "$@"
+}
+
+# Source Git autocompletion script for Zsh
+if [[ ! -f $ZDOTDIR/completion/_git ]]; then
+  curl -o "$ZDOTDIR"/completion/_git \
+    https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh
+fi
+
+# Use Git's autocomplete for the dotfiles function
+compdef _git dotfiles
+# Set proper zstyle for dotfiles completion to use Git's
+zstyle ':completion:*:*:dotfiles:*' script "$ZDOTDIR"/completion/_git
+
+# Set up other completions
+[[ ! $(command -v bw) ]] && \
+  wget -O "${HOME}/bin/bw.zip" "https://vault.bitwarden.com/download/?app=cli&platform=linux" && \
+  unzip -o "${HOME}/bin/bw.zip" -d "${HOME}/bin/" && \
+  chmod +x "${HOME}/bin/bw" && \
+  rm -fv "${HOME}/bin/bw.zip"
+eval "$(bw completion --shell zsh)"
+compdef _bw bw
+
+ZSH_DEBUG_LOG_ENDFILE "${(%):-%N}"

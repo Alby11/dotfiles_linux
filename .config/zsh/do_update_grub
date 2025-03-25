@@ -1,0 +1,7 @@
+# vim: filetype=zsh
+
+sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg \
+  && sudo grub2-mkconfig -o /boot/grub2/grub.cfg \
+  && sudo ls -lAh /boot/efi/EFi/fedora \
+  ; sudo ls -lAh /boot/grub2 \
+  ; sudo cat /proc/cmdline

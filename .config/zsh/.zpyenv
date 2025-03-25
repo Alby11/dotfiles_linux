@@ -1,0 +1,98 @@
+# vim: filetype=zsh
+
+# NOTE: Configure integration between pyenv, pipx, poetry and zsh
+# CREDITS: https://diegoquintanav.github.io/poetry-primer.html
+
+# Enable debugging if ZSH_DEBUG is set
+ZSH_DEBUG_LOG_STARTFILE "${(%):-%N}"
+
+# Set Python to use UTF-8 encoding for standard I/O
+export PYTHONIOENCODING='UTF-8'
+
+# Define pyenv root directory
+export PYENV_ROOT="${HOME}/.pyenv"
+
+# Ensure PYENV_ROOT directory exists, and install dependencies if it doesn't
+if [[ ! -d $PYENV_ROOT ]]; then
+  mkdir -p $PYENV_ROOT
+
+  if command -v apt-get &>/dev/null; then
+    echo "Please install the required packages manually: make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python3-openssl git"
+  elif command -v dnf &>/dev/null; then
+    echo "Please install the required packages manually: make gcc zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel wget curl llvm ncurses-devel tk-devel libffi-devel xz-devel git"
+  elif command -v pacman &>/dev/null; then
+    echo "Please install the required packages manually: base-devel openssl zlib bzip2 readline sqlite wget curl llvm ncurses tk libffi xz git"
+  else
+    echo "Unsupported operating system or package manager."
+  fi
+fi
+
+# Install pyenv if not already installed
+if [[ ! -x ${PYENV_ROOT}/bin/pyenv ]]; then
+  git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+fi
+
+# List of pyenv plugins to install
+pyenv_plugins=(
+  "ashwinvis/pyenv-virtualenv-migrate"
+  "concordusapps/pyenv-implict"
+  "fizista/pyenv-choice"
+  "jawshooah/pyenv-default-packages"
+  "massongit/pyenv-pip-update"
+  "pyenv/pyenv-ccache"
+  "pyenv/pyenv-doctor"
+  "pyenv/pyenv-installer"
+  "pyenv/pyenv-pip-migrate"
+  "pyenv/pyenv-update"
+  "pyenv/pyenv-users"
+  "pyenv/pyenv-virtualenv"
+  "pyenv/pyenv-virtualenvwrapper"
+  "sprout42/pyenv-fix-version"
+  "zyrikby/pyenv-pip-upgrade"
+)
+
+# Clone or update pyenv plugins
+for pyenv_plugin in $pyenv_plugins; do
+  pyenv_plugin_url="https://github.com/${pyenv_plugin}.git"
+  pyenv_plugin_dir="${PYENV_ROOT}/plugins/$(basename $pyenv_plugin)"
+  if [[ -d $pyenv_plugin_dir ]]; then
+    # git -C $pyenv_plugin_dir pull --ff-only
+  else
+    git clone --progress $pyenv_plugin_url $pyenv_plugin_dir
+  fi
+done
+
+# Update PATH and initialize pyenv
+if [[ -d ${PYENV_ROOT}/bin ]]; then
+  export PATH="${PYENV_ROOT}/bin:${PATH}"
+  eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
+fi
+
+# Check if there's alredy a global python version set
+# if not install python 3.13.1 and set it as global
+if [[ -z $(pyenv global) ]]; then
+  pyenv global system
+fi
+
+
+if [ ! $(command -v pipx) ]; then
+  # Install pipx
+  python3 -m pip install --upgrade pip
+  python3 -m pip install --user pipx
+  python3 -m pipx ensurepath
+  pipx install virtualenvwrapper
+  pipx install virtualenv-clone
+  # Install poetry
+  pipx install poetry --force
+  # configure poetry
+  poetry config virtualenvs.create false
+  poetry config virtualenvs.in-project false
+  exec "$SHELL"
+fi
+
+# Set preference for pyenv-virtualenvwrapper to use pyvenv
+export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
+
+# End debugging if ZSH_DEBUG is set
+ZSH_DEBUG_LOG_ENDFILE "${(%):-%N}"

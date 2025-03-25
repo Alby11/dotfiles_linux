@@ -1,0 +1,1191 @@
+# vim: filetype=zsh
+#
+# NOTE: .zaliases.zsh - Set whatever shell aliases you want.
+#
+
+ZSH_DEBUG_LOG_STARTFILE "${(%):-%N}"
+
+alias -g _="sudo"
+
+if command -v grep &>/dev/null; then
+	alias grep='grep --color=auto '
+	alias -g G=' | grep -i '
+fi
+# bat-extras
+if command -v bat &>/dev/null; then
+	alias -g B=' | bat'
+	alias -g BF=' | bat --style=full'
+	alias -g batf='bat --style=full'
+	alias bathelp='bat --plain --language=help'
+	# alias -g -- -h='-h 2>&1 | bat --language=help --style=plain'
+	# alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
+fi
+if command -v batgrep &>/dev/null; then
+	alias -g BG=' | batgrep --ignore-case --color '
+	alias bgrep='batgrep --ignore-case --color '
+fi
+if command -v batman &>/dev/null; then
+	alias bman='batman'
+fi
+if command -v batdiff &>/dev/null; then
+	alias -g bdiff=' | batdiff '
+fi
+if command -v batwatch &>/dev/null; then
+	alias bwatch='batwatch '
+fi
+
+alias SzAC='autoload -Uz compinit && compinit'
+alias C="clear"
+alias EE='exit'
+alias Sbashrc="source ~/.bashrc"
+alias Sbasha="source ~/.bash_aliases"
+alias Szsha="source $ZDOTDIR/.zaliases"
+alias Szshenv="source $ZDOTDIR/.zshenv"
+alias Szshrc="source $ZDOTDIR/.zshrc"
+alias chmod='sudo chmod '
+alias chown='sudo chown '
+alias dfh='sudo /bin/df -h'
+alias freeh='sudo free -mh'
+alias h="history -10"   # last 10 history commands
+alias hh="history -20"  # last 10 history commands
+alias hhh="history -30" # last 10 history commands
+alias rmfv="rm -fv"
+alias rmrf="rm -rf"
+alias rmrfv="rm -rfv"
+alias ssht="ssh -t"
+# -X enable X11 forwarding
+alias sshX="ssh -X"
+# -t allocate pseudo termina
+alias sshtX="ssh -t -X -o TCPKeepAlive=yes"
+# -o PreferredAuthentications=password forces pwd auth
+alias sshpwd='ssh -o PreferredAuthentications=password TCPKeepAlive=yes'
+# -F /dev/null fake alternate config file to skip the real one
+alias sshnoconfpwd='ssh -F /dev/null -o PreferredAuthentications=password,TCPKeepAlive=yes'
+alias sshXpwd='ssh -X -o PreferredAuthentications=password,TCPKeepAlive=yes'
+alias sshXnoconfpwd='ssh -X -F /dev/null -o PreferredAuthentications=password,TCPKeepAlive=yes'
+alias sshtpwd='ssh -t -o PreferredAuthentications=password,TCPKeepAlive=yes'
+alias sshtnoconfpwd='ssh -t -F /dev/null -o PreferredAuthentications=password,TCPKeepAlive=yes'
+alias sshtXpwd='ssh -t -X -o PreferredAuthentications=password,TCPKeepAlive=yes'
+alias sshtXnoconfpwd='ssh -t -X -F /dev/null -o PreferredAuthentications=password,TCPKeepAlive=yes'
+alias sshync='echo "Host: "; read thehost; sync_home -u $(whoami) -s $thehost; ssh -tX $thehost; \
+  unset thehost'
+alias sshyncpwd='echo "Host: "; read thehost; sync_home -u $(whoami) -s $thehost; \
+  ssh -tX -F /dev/null -o PreferredAuthentications=password $thehost; unset thehost'
+alias sshcidncpwd='ssh-copy-id -o PreferredAuthentications=password -F /dev/null -f -i'
+alias mount='sudo mount'
+alias umount='sudo umount'
+alias fusermount='sudo fusermount'
+alias fmount='sudo fusermount'
+alias fumount='sudo fusermount -u'
+alias mountc='sudo mount | \
+  column --table --table-columns=mountpoint,on,mount,type,typename,options'
+alias mountj='sudo mount | \
+  column --table --table-columns=mountpoint,on,mount,type,typename,options --json'
+alias netstat="sudo netstat"
+
+### Systemd block
+if command -v systemctl &>/dev/null; then
+
+	# Basic systemctl commands
+	alias ctl="sudo systemctl"                             # General systemctl (system scope)
+	alias ctlusr="systemctl --user"                       # General systemctl (user scope)
+
+	# Daemon reloads
+	alias ctldr="sudo systemctl daemon-reload"            # Reload system daemon
+	alias ctlusrdr="systemctl --user daemon-reload"        # Reload user daemon
+
+	# Start/Stop/Restart/Reload commands
+	alias ctlsp="sudo systemctl stop "                    # Stop system service
+	alias ctlusrsp="systemctl --user stop "               # Stop user service
+	alias ctlst="sudo systemctl start "                   # Start system service
+	alias ctlusrst="systemctl --user start "              # Start user service
+	alias ctlrt="sudo systemctl restart "                 # Restart system service
+	alias ctlusrrt="systemctl --user restart "            # Restart user service
+	alias ctlrl="sudo systemctl reload "                  # Reload system service
+	alias ctlusrrl="systemctl --user reload "             # Reload user service
+
+	# Status commands
+	alias ctls="sudo systemctl status "                   # Status of system service
+	alias ctlusrs="systemctl --user status "              # Status of user service
+
+	# Enable/Disable units
+	alias ctle="sudo systemctl enable "                   # Enable system unit
+	alias ctlusre="systemctl --user enable "              # Enable user unit
+	alias ctld="sudo systemctl disable "                  # Disable system unit
+	alias ctlusrd="systemctl --user disable "             # Disable user unit
+
+	# Mask/Unmask units
+	alias ctlmask="sudo systemctl mask "                  # Mask system unit
+	alias ctlusrmask="systemctl --user mask "             # Mask user unit
+	alias ctlunmask="sudo systemctl unmask "              # Unmask system unit
+	alias ctlusrunmask="systemctl --user unmask "         # Unmask user unit
+
+	# Failed units and reset status
+	alias ctlfailed="sudo systemctl --failed --all "      # List failed system units
+	alias ctlusrfailed="systemctl --user --failed --all " # List failed user units
+	alias ctlresetfailed="sudo systemctl reset-failed "            # Reset failed system units
+	alias ctlusrresetfailed="systemctl --user reset-failed "       # Reset failed user units
+
+	# List units
+	alias ctllu="sudo systemctl list-units"               # List all system units
+	alias ctlusru="systemctl --user list-units"           # List all user units
+	alias ctllus="sudo systemctl list-units --type=service"  # List system services
+	alias ctlusrus="systemctl --user list-units --type=service"  # List user services
+
+	# Analyze Systemd critical chain
+	alias ctlchain="sudo systemd-analyze critical-chain"  # Show system critical chain
+	alias ctlusrchain="systemd-analyze critical-chain --user"  # Show user critical chain
+
+	# Generate graph for visualization (requires Graphviz)
+	alias ctlgraph='sudo systemd-analyze dot | dot -Tsvg -o systemd-hierarchy.svg && echo "Generated: systemd-hierarchy.svg"'  # Graph for system units
+	alias ctlusrgraph='systemd-analyze dot --user | dot -Tsvg -o user-systemd-hierarchy.svg && echo "Generated: user-systemd-hierarchy.svg"'  # Graph for user units
+
+	# Show startup times
+	alias ctlblame="sudo systemd-analyze blame"           # Show system startup times
+	alias ctlusrblame="systemd-analyze blame --user"      # Show user startup times
+
+	# List dependencies for units
+	alias ctldeps="sudo systemctl list-dependencies "     # List dependencies for a system unit
+	alias ctlusrdeps="systemctl --user list-dependencies "  # List dependencies for a user unit
+
+	# Inspect unit properties
+	alias ctlshow="sudo systemctl show "                  # Show properties of a system unit
+	alias ctlusrshow="systemctl --user show "             # Show properties of a user unit
+
+	# Check Unit Files
+	alias ctlcat="sudo systemctl cat "                    # View system unit file
+	alias ctlusrcat="systemctl --user cat "               # View user unit file
+
+	# Edit units
+	alias ctledit="sudo systemctl edit "                  # Edit system unit file
+	alias ctlusredit="systemctl --user edit "             # Edit user unit file
+
+	# Targets (system scope)
+	alias ctlts="sudo systemctl list-unit-files --type=target"         # List all system targets
+	alias ctltu="sudo systemctl list-units --type=target"             # List active system targets
+	alias ctltd="sudo systemctl list-dependencies "                  # Show dependencies for a specific system target
+	alias ctltg="sudo systemctl get-default"                          # Get the default system target
+	alias ctltsd="sudo systemctl set-default "                        # Set the default system target
+	alias ctltiso="sudo systemctl isolate "                           # Start or isolate a specific system target
+
+	# Targets (user scope)
+	alias ctlusrts="systemctl --user list-unit-files --type=target"    # List all user targets
+	alias ctlusrtu="systemctl --user list-units --type=target"        # List active user targets
+	alias ctlusrtd="systemctl --user list-dependencies "             # Show dependencies for a specific user target
+	alias ctlusrtg="systemctl --user get-default"                     # Get the default user target
+	alias ctlusrtsd="systemctl --user set-default "                   # Set the default user target
+	alias ctlusrtiso="systemctl --user isolate "                      # Start or isolate a specific user target
+
+	# Show environment
+	alias ctlenv="sudo systemctl show-environment"                # Show system environment
+	alias ctlusrenv="systemctl --user show-environment"           # Show user environment
+
+	# Show Systemd version
+	alias ctlver="systemctl --version"                    # Show systemd version
+fi
+## Journalctl
+if command -v journalctl &>/dev/null; then
+
+	# Logs for system units
+	alias j="sudo journalctl"                         # General journalctl
+	alias ju="sudo journalctl -u "                   # Logs for a specific system unit
+	alias jf="sudo journalctl --follow"              # Follow logs
+	alias jk="sudo journalctl -k"                    # Kernel logs
+	alias juc="sudo journalctl --catalog --pager-end --unit "  # Logs with catalog for a specific system unit
+	alias jfc="sudo journalctl --follow --catalog --unit "     # Follow logs with catalog for a specific system unit
+	alias jfk="sudo journalctl --follow --dmesg"     # Follow kernel logs (dmesg)
+
+	# Logs for user units
+	alias jus="journalctl --user"                    # General journalctl (user scope)
+	alias jusu="journalctl --user -u "              # Logs for a specific user unit
+	alias jusf="journalctl --user --follow"         # Follow logs for user services
+	alias jusk="journalctl --user -k"               # Kernel logs (user scope)
+	alias jusuc="journalctl --user --catalog --pager-end --unit "  # Logs with catalog for a specific user unit
+	alias jusfc="journalctl --user --follow --catalog --unit "     # Follow logs with catalog for a specific user unit
+
+fi
+### End of Systemd block
+
+# Check if the command 'ccze' is available
+if command -v ccze &>/dev/null; then
+    # Create a global alias 'CC' that pipes the output through 'ccze' with ANSI color codes
+    alias -g CC=' | ccze -A'
+fi
+
+if command -v notify-send &>/dev/null; then
+	# Credits to: https://gist.github.com/Feniksovich
+	# Add an "alert" alias for long running commands.  Use like so:
+	#   sleep 10; alert
+	alias -g alert='notify-send --urgency=low -i \
+    "$([ $? = 0 ] && echo terminal || \
+  echo error)" "$(history|tail -n1 | \
+    sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"' \
+		;
+fi
+
+if command -v iptables &>/dev/null; then
+	alias iptables='sudo iptables'
+	alias it='sudo iptables '
+	# Lookup iptables chain
+	alias itL="iptables --line-numbers -nvL "
+fi
+
+if command -v apt &>/dev/null; then
+	alias apt='sudo apt'
+	alias aptap='sudo apt autopurge'
+	alias aptar='sudo apt autoremove'
+	alias aptc='sudo apt chek'
+	alias aptdup='sudo apt dist-upgrade'
+	alias aptfl='sudo apt-file -i list'
+	alias apti='sudo apt install'
+	alias aptI='sudo apt install -y'
+	alias aptl='sudo apt list'
+	alias aptli='sudo apt list --installed'
+	alias aptlu='sudo apt list --upgradable'
+	alias aptp='sudo apt-file -i search'
+	alias aptr='sudo apt remove'
+	alias apts='sudo apt search'
+	alias aptu='sudo apt update'
+	alias aptup='sudo apt upgrade'
+	alias aptw='sudo apt show'
+fi
+
+if command -v dnf &>/dev/null; then
+	alias dnf='sudo dnf'
+	alias dnfar='sudo dnf autoremove'
+	alias dnfcu='sudo dnf check-update'
+	alias dnfDS='sudo dnf distro-sync -y'
+	alias dnfh='sudo dnf history'
+	alias dnff='sudo dnf info'
+	alias dnfi='sudo dnf install'
+	alias dnfI='sudo dnf install -y'
+	alias dnfk='sudo dnf copr'
+	alias dnfl='sudo dnf list'
+	alias dnflar='sudo dnf list autoremove'
+	alias dnfli='sudo dnf list --installed'
+	alias dnfp='sudo dnf provides'
+	alias dnfq='sudo dnf repoquery'
+	alias dnfr='sudo dnf remove'
+	alias dnfs='sudo dnf search'
+	alias dnfup='sudo dnf upgrade'
+	alias dnfuua='sudo dnf check-update ; sudo dnf upgrade ; sudo dnf autoremove'
+fi
+
+if command -v tmux &>/dev/null; then
+	alias T='tmux '
+	alias tS='tmux kill-server'
+	alias ta='tmux attach -t '
+	alias tk='tmux kill-session -t '
+	alias tls='tmux ls '
+	alias tn='tmux new -s '
+	alias trs='tmux rename-session -t '
+fi
+
+if command -v xclip &>/dev/null; then
+	alias -g Xp='xclip -o '
+	alias -g Xy=' | xclip -i '
+fi
+if command -v clipboard &>/dev/null; then
+	alias -g Cp="clipboard "
+	alias -g Cy=' | clipboard '
+fi
+if command -v wl-copy &>/dev/null; then
+	alias -g Wp="wl-paste "
+	alias -g Wy=' | wl-copy '
+fi
+
+if command -v ranger &>/dev/null; then
+	alias rw='ranger '
+fi
+
+if command -v fd &>/dev/null; then
+	alias fdh='fd --hidden'
+elif command -v fdfind &>/dev/null; then
+	alias fd='fdfind '
+	alias fdh='fdfind --hidden'
+fi
+
+if command -v git &>/dev/null; then
+	alias g='git '
+	alias dot='dotfiles '
+fi
+
+if command -v gitui &>/dev/null; then
+	alias gitui="gitui -t mocha.ron"
+fi
+
+if command -v kubectl &>/dev/null; then
+	alias k='kubectl '
+fi
+
+if command -v minikube &>/dev/null; then
+	alias mk='minikube '
+fi
+
+if command -v docker &>/dev/null; then
+	alias dkb='docker build'
+	alias dkbt='docker build --tag'
+	alias dkc='docker container'
+	alias dkci='docker container inspect'
+	alias dkcls='docker container ls'
+	alias dkcp='docker container update'
+	alias dkcs='docker container stats'
+	alias dkct='docker container top'
+	alias dk='docker'
+	alias dke='docker exec'
+	alias dkeit='docker exec --interactive --tty'
+	alias dkh='docker history'
+	alias dkhh='docker history --human'
+	alias dkhnt='docker history --no-trunc'
+	alias dki='docker image'
+	alias dkii='docker image inspect'
+	alias dkin='docker login'
+	alias dkis='docker images'
+	alias dkI='docker inspect'
+	alias dkk='docker-compose'
+	alias dkkc='docker-compose scale'
+	alias dkkc='docker-compose restart'
+
+	alias dkku='docker-compose up -d'
+	alias dkkuf='docker-compose up'
+
+	alias dkkt='docker-compose top'
+	alias dkl='docker logs'
+	alias dkld='docker logs --details'
+	alias dkldf='docker logs --details --follow'
+	alias dklf='docker logs --follow'
+	alias dkn='docker network'
+	alias dkni='docker network inspect'
+	alias dknls='docker network ls'
+	alias dkout='docker logout'
+	alias dkps='docker ps'
+	alias dkr='docker run'
+	alias dkrit='docker run --interactive --tty'
+	alias dks='docker service'
+	alias dksi='docker service inspect'
+	alias dksl='docker service logs'
+	alias dksls='docker service ls'
+	alias dksp='docker service update'
+	alias dksps='docker service ps'
+	alias dkss='docker service scale'
+	alias dkS='docker search'
+	alias dkt='docker stack'
+	alias dktc='docker stack config'
+	alias dktls='docker stack ls'
+	alias dktps='docker stack ps'
+	alias dkts='docker stack services'
+	alias dkx='docker context'
+	alias dkxu='docker context use'
+
+	alias dkv='docker volume'
+	alias dkvi='docker volume inspect'
+	alias dkvls='docker volume ls'
+	alias dkxls='docker context ls'
+	alias dkxp='docker context update'
+	alias dkxs='docker context show'
+	alias dkxu='docker context use'
+fi
+
+if command -v ansible &>/dev/null; then
+	alias an='ansible'
+	alias ana='ansible all'
+	alias anam='ansible all -m'
+	alias ap='ansible-playbook'
+	alias ag='ansible-galaxy'
+fi
+
+if command -v podman &>/dev/null; then
+	alias pd='podman '
+fi
+
+alias xway='env -u WAYLAND_DISPLAY '
+
+if command -v curl &>/dev/null; then
+	# Creditst to Jeremy "Jay" LaCroix
+	# <https://www.learnlinux.tv/10-linux-terminal-tips-and-tricks-to-enhance-your-workflow/
+	alias speedtest='curl -s \
+      https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py \
+      | python - \
+      ;'
+	# alias myip='curl http://ipecho.net/plain; echo '
+	alias myip='curl icanhazip.com'
+	# alias wimp='curl https://wttr.in/imperia'
+	alias wimp='wth imperia'
+fi
+
+if [ "$(command -v fzf)" ] && [ "$(command -v rg)" ]; then
+	alias -g F="| fzf"
+	alias -g R="| rg"
+	alias -g rg-fzf="rg . | fzf"
+	alias -g rg-fzf-l="rg . | fzf | cut -d ':' -f 1"
+	alias rg='rg --pcre2'
+else
+	echo "fzf|rg missing..."
+fi
+
+alias resetSound='/bin/systemctl --user restart pipewire.service'
+
+### Python block
+# url encode/decode
+if command -v python &>/dev/null; then
+	alias -g urldecode="python3 -c 'import sys, urllib.parse as ul; print(ul.unquote_plus(sys.argv[1]))'"
+	alias -g urlencode="python3 -c 'import sys, urllib.parse as ul; print (ul.quote_plus(sys.argv[1]))'"
+fi
+### End of Python block
+
+# PIP block
+if command -v pip &>/dev/null; then
+	alias pipi="pip install"
+	alias pipiu="pip install --user"
+	alias pipu="pip uninstall"
+	alias pipuu="pip uninstall --user"
+	alias pipl="pip list"
+	alias piplu="pip list --user"
+fi
+# end of PIP block
+
+# PIP-INSTALL block
+if command -v pip-install &>/dev/null; then
+	alias pins="pip-install search"
+	alias pini="pip-install install"
+	alias pinu="pip-install uninstall"
+	alias pinl="pip-install list"
+	alias pinup="pip-install upgrade"
+	alias pinw="pip-install show"
+fi
+# end of PIP-INSTALL block
+
+# PIPX block
+if command -v pipx &>/dev/null; then
+    alias ppxi="pipx install"
+    alias ppxu="pipx uninstall"
+    alias ppxr="pipx reinstall"
+    alias ppxl="pipx list"
+    alias ppxup="pipx upgrade"
+    alias ppxupall="pipx upgrade-all"
+    alias ppxrun="pipx run"
+    alias ppxenv="pipx environment"
+fi
+# end of PIPX block
+
+# Poetry block
+if command -v poetry &>/dev/null; then
+    alias ptryi="poetry install"
+    alias ptryu="poetry update"
+    alias ptrya="poetry add"
+    alias ptryr="poetry remove"
+    alias ptryb="poetry build"
+    alias ptryp="poetry publish"
+    alias ptryl="poetry lock"
+    alias ptrys="poetry shell"
+    alias ptryrn="poetry run"
+    alias ptrychk="poetry check"
+fi
+# end of Poetry block
+
+### git
+alias gbfzf="fzf-git-branch"
+alias gcofzf="fzf-git-checkout"
+alias gS="git submodule"
+### end of git block
+### dotfiles: git adaptation for dotfiles
+alias dc!="dotfiles commit --verbose --amend"
+alias dca!="dotfiles commit --verbose --all --amend"
+alias dcan!="dotfiles commit --verbose --all --no-edit --amend"
+alias dcans!="dotfiles commit --verbose --all --signoff --no-edit --amend"
+alias dpf!="dotfiles push --force"
+alias d="dotfiles"
+alias da="dotfiles add"
+alias daa="dotfiles add --all"
+alias dam="dotfiles am"
+alias dama="dotfiles am --abort"
+alias damc="dotfiles am --continue"
+alias dams="dotfiles am --skip"
+alias damscp="dotfiles am --show-current-patch"
+alias dap="dotfiles apply"
+alias dapa="dotfiles add --patch"
+alias dapt="dotfiles apply --3way"
+alias dau="dotfiles add --update"
+alias dav="dotfiles add --verbose"
+alias db="dotfiles branch"
+alias dbD="dotfiles branch --delete --force"
+alias dba="dotfiles branch --all"
+alias dbd="dotfiles branch --delete"
+alias dbda="dotfiles branch --no-color --merged | command grep -vE '^([+*]|\s*($(git_main_branch)|$(git_develop_branch))\s*$)' | command xargs dotfiles branch --delete 2>/dev/null"
+alias dbfzf="fzf-dotfiles-branch"
+alias dbg='LANG=C dotfiles branch -vv | grep ": gone\]"'
+alias dbgD='LANG=C dotfiles branch --no-color -vv | grep ": gone\]" | awk '\''{print $1}'\'' | xargs dotfiles branch -D'
+alias dbgd='LANG=C dotfiles branch --no-color -vv | grep ": gone\]" | awk '\''{print $1}'\'' | xargs dotfiles branch -d'
+alias dbl="dotfiles blame -b -w"
+alias dbnm="dotfiles branch --no-merged"
+alias dbr="dotfiles branch --remote"
+alias dbs="dotfiles bisect"
+alias dbsb="dotfiles bisect bad"
+alias dbsg="dotfiles bisect good"
+alias dbsr="dotfiles bisect reset"
+alias dbss="dotfiles bisect start"
+alias dc="dotfiles commit --verbose"
+alias dca="dotfiles commit --all"
+alias dcam="dotfiles commit --message"
+alias dcas="dotfiles commit --signoff"
+alias dcasm="dotfiles commit --message"
+alias dcb="dotfiles checkout -b"
+alias dcd="dotfiles checkout $(git_develop_branch)"
+alias dcf="dotfiles config --list"
+alias dcl="dotfiles clone --recurse-submodules"
+alias dclean="dotfiles clean --interactive -d"
+alias dcm="dotfiles checkout $(git_main_branch)"
+alias dcmsg="dotfiles commit --message"
+alias dcmsg!="dotfiles commit --amend --message"
+alias dcn!="dotfiles commit --verbose --no-edit --amend"
+alias dco="dotfiles checkout"
+alias dcofzf="fzf-dotfiles-checkout"
+alias dcor="dotfiles checkout --recurse-submodules"
+alias dcount="dotfiles shortlog --summary --numbered"
+alias dcp="dotfiles cherry-pick"
+alias dcpa="dotfiles cherry-pick --abort"
+alias dcpc="dotfiles cherry-pick --continue"
+alias dcs="dotfiles commit --gpg-sign"
+alias dcsm="dotfiles commit --signoff --message"
+alias dcss="dotfiles commit --gpg-sign --signoff"
+alias dcssm="dotfiles commit --gpg-sign --signoff --message"
+alias ddf="dotfiles -c color.ui=false diff"
+alias ddfca="dotfiles -c color.ui=false diff --cached"
+alias ddct="dotfiles describe --tags $(dotfiles rev-list --tags --max-count=1)"
+alias ddfcw="dotfiles -c color.ui=false diff --cached --word-diff"
+alias ddfs="dotfiles -c color.ui=false diff --staged"
+alias ddft="dotfiles -c color.ui=false diff-tree --no-commit-id --name-only -r"
+alias ddfup="dotfiles -c color.ui=false diff @{upstream}"
+alias ddfw="dotfiles -c color.ui=false diff --word-diff"
+alias dF='dotfiles diff'
+alias dFt='dotfiles difftool -y'
+alias dfe='dotfiles fetch'
+alias dfa='dotfiles fetch --all --prune --jobs=10'
+alias dfg='dotfiles files | grep'
+alias dfo='dotfiles fetch origin'
+alias dg='dotfiles gui citool'
+alias dga='dotfiles gui citool --amend'
+alias dgpull='dotfiles pull origin "$(git_current_branch)"'
+alias dgpush='dotfiles push origin "$(git_current_branch)"'
+alias dgsup='dotfiles branch --set-upstream-to=origin/$(git_current_branch)'
+alias dhh='dotfiles help'
+alias dhub='web_search github'
+alias dignore='dotfiles update-index <EUGPSCoordinates>--assume-unchanged'
+alias dignored='dotfiles ls-files -v | grep "^[[:lower:]]"'
+alias dot-svn-dcommit-push='dotfiles svn dcommit && dotfiles push github $(git_main_branch):svntrunk'
+alias dgk='\gitk --all --branches &!'
+alias dke='\gitk --all $(dotfiles log --walk-reflogs --pretty=%h) &!'
+alias dl='dotfiles pull'
+alias dlg='dotfiles log --stat'
+alias dlgg='dotfiles log --graph'
+alias dlgga='dotfiles log --graph --decorate --all'
+alias dlgm='dotfiles log --graph --max-count=10'
+alias dlgp='dotfiles log --stat --patch --max-count=10'
+alias dlo='dotfiles log --oneline --decorate'
+alias dlod='dotfiles log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset"'
+alias dlods='dotfiles log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset" --date=short'
+alias dlog='dotfiles log --oneline --decorate --graph'
+alias dloga='dotfiles log --oneline --decorate --graph --all'
+alias dlol='dotfiles log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset"'
+alias dlola='dotfiles log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset" --all'
+alias dlols='dotfiles log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset" --stat'
+alias dlp='_git_log_prettily'
+alias dluc='dotfiles pull upstream $(git_current_branch)'
+alias dlum='dotfiles pull upstream $(git_main_branch)'
+alias dm='dotfiles merge'
+alias dma='dotfiles merge --abort'
+alias dmom='dotfiles merge origin/$(git_main_branch)'
+alias dms='dotfiles merge --squash'
+alias dmtl='dotfiles mergetool --no-prompt'
+alias dmtlvim='dotfiles mergetool --no-prompt --tool=vimdiff'
+alias dmum='dotfiles merge upstream/$(git_main_branch)'
+alias dp='dotfiles push'
+alias dpd='dotfiles push --dry-run'
+alias dpf='dotfiles push --force-with-lease --force-if-includes'
+alias dpoat='dotfiles push origin --all && dotfiles push origin --tags'
+alias dpod='dotfiles push origin --delete'
+alias dpr='dotfiles pull--rebase'
+alias dpristine='dotfiles reset--hard && dotfiles clean--force-dfx'
+alias dpsup='dotfiles push --set-upstream origin $(git_current_branch)'
+alias dpsupf='dotfiles push --set-upstream origin $(git_current_branch) --force-with-lease --force-if-includes'
+alias dpu='dotfiles push upstream'
+alias dpv="dotfiles push --verbose"
+alias dr='dotfiles remote'
+alias dra='dotfiles remote add'
+alias drb='dotfiles rebase'
+alias drba='dotfiles rebase --abort'
+alias drbc='dotfiles rebase --continue'
+alias drbd='dotfiles rebase $(git_develop_branch)'
+alias drbi='dotfiles rebase --interactive'
+alias drbm='dotfiles rebase $(git_main_branch)'
+alias drbo='dotfiles rebase --onto'
+alias drbom='dotfiles rebase origin/$(git_main_branch)'
+alias drbs='dotfiles rebase --skip'
+alias drev='dotfiles revert'
+alias drh='dotfiles reset'
+alias drhh='dotfiles reset --hard'
+alias drm='dotfiles rm'
+alias drmc='dotfiles rm --cached'
+alias drmv='dotfiles remote rename'
+alias droh='dotfiles reset origin/$(git_current_branch) --hard'
+alias drrm='dotfiles remote remove'
+alias drs='dotfiles restore'
+alias drset='dotfiles remote set-url'
+alias drss='dotfiles restore --source'
+alias drst='dotfiles restore --staged'
+alias drt='cd "$(dotfiles rev-parse --show-toplevel || echo .)"'
+alias dru='dotfiles reset --'
+alias drup='dotfiles remote update'
+alias drv='dotfiles remote --verbose'
+alias dsb='dotfiles status --short --branch'
+alias dsd='dotfiles svn dcommit'
+alias dsh='dotfiles show'
+alias dsi='dotfiles submodule init'
+alias dsps='dotfiles show --pretty=short --show-signature'
+alias dsr='dotfiles svn rebase'
+alias dss='dotfiles status --short'
+alias dst='dotfiles status'
+alias dsta='dotfiles stash push'
+alias dstaa='dotfiles stash apply'
+alias dstall='dotfiles stash --all'
+alias dstc='dotfiles stash clear'
+alias dstd='dotfiles stash drop'
+alias dstl='dotfiles stash list'
+alias dstp='dotfiles stash pop'
+alias dsts='dotfiles stash show --text'
+alias dsu='dotfiles submodule update'
+alias dsw='dotfiles switch'
+alias dswc='dotfiles switch --create'
+alias dswd='dotfiles switch $(git_develop_branch)'
+alias dswm='dotfiles switch $(git_main_branch)'
+alias dS='dotfiles submodule'
+alias dtl='dtl(){ dotfiles tag --sort=-v:refname -n --list "${1}*" }: noglob dtl'
+alias dts='dotfiles tag --sign'
+alias dtv='dotfiles tag | sort -V'
+alias dunignore='dotfiles update-index --no-assume-unchanged'
+alias dunwip='dotfiles rev-list --max-count=1 --format="%s" HEAD | grep -q "\--wip--" && dotfiles reset HEAD~1'
+alias dup='dotfiles pull --rebase'
+alias dupa='dotfiles pull --rebase --autostash'
+alias dupav='dotfiles pull --rebase --autostash --verbose'
+alias dupom='dotfiles pull --rebase origin $(dot_main_branch)'
+alias dupomi='dotfiles pull --rebase=interactive origin $(dot_main_branch)'
+alias dupv='dotfiles pull --rebase --verbose'
+alias dv='dotfiles push --verbose'
+alias dv='dotfiles push --verbose'
+alias dwch='dotfiles whatchanged -p --abbrev-commit --pretty=medium'
+alias dwip='dotfiles add -A; dotfiles rm $(dotfiles ls-files --deleted) 2> /dev/null; dotfiles commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]"'
+alias dwt='dotfiles worktree'
+alias dwta='dotfiles worktree add'
+alias dwtls='dotfiles worktree list'
+alias dwtmv='dotfiles worktree move'
+alias dwtrm='dotfiles worktree remove'
+### end of dotfiles block
+
+### Git block
+# some git overrides
+alias gcmsg!='git commit --amend --message'
+alias gfV='git fetch --verbose'
+alias gF='git -c color.ui=false diff'
+alias gFca='git -c color.ui=false diff --cached'
+alias gFcw='git -c color.ui=false diff --cached --word--c color.ui=false diff'
+alias gFs='git -c color.ui=false diff --staged'
+alias gFt='git -c color.ui=false diff-tree --no-commit-id --name-only -r'
+alias gFup='git -c color.ui=false diff @{upstream}'
+alias gFw='git -c color.ui=false diff --word--c color.ui=false diff'
+alias gF='git  diff'
+alias gmtlvim='git mergetool --no-prompt --tool=$EDITOR'
+alias grgu='git remote get-url'
+alias grsu='git remote set-url'
+# gh aliases
+alias ghrv='gh repo view'
+alias ghrvw='gh repo view --web'
+### end of Git block
+
+alias killuser='function _ku(){ pkill -u $1; }; _ku'
+alias logoutuser='function _lu(){ pkill -KILL -u $1; }; _lu'
+alias bwck='bw login --check && bw unlock --check'
+
+if [[ -d /opt/sentinelone ]]; then
+	alias sentinelctl='sudo sentinelctl'
+	alias sctl='sudo sentinelctl'
+fi
+
+if command -v cargo &>/dev/null; then
+	alias cargoinstalled='cargo install --list'
+fi
+
+if command -v emacs &>/dev/null; then
+	alias emacs='emacs -nw'
+fi
+### LSD -> EZA -> LS block
+# Check if both lsd and eza are available
+if command -v lsd > /dev/null 2>&1 && command -v eza > /dev/null 2>&1; then
+
+  # Declare an array for lsd parameters
+  typeset -ag lsd_params
+
+  # Define default lsd parameters
+  lsd_params=(
+    '--group-directories-first' # Group directories first
+    '--color=always' # Always use colored output
+    '--icon=always' # Always show icons
+    '--date=date' # Use long date format
+    '--blocks=permission,user,group,size,date,name' # Display these blocks of information
+  )
+
+  # If _LSD_PARAMS is set, override default lsd parameters
+  [[ -n $_LSD_PARAMS ]] && lsd_params=($_LSD_PARAMS)
+
+  # Define aliases for lsd with the specified parameters
+  alias ls='lsd ${lsd_params[@]}'
+  alias l='lsd --ignore-glob ${lsd_params[@]}' # Ignore glob patterns
+  alias ll='lsd --all --long --header ${lsd_params[@]}' # Show all files, long format, with header
+  alias llm='lsd --all --long --header --sort=modified ${lsd_params[@]}' # Sort by modification time
+	alias la='lsd -l --all --human-readable --inode --group-dirs first --icon=always --icon-theme=fancy'
+	alias lx='lsd -l --all --human-readable --inode --group-dirs first --icon=always --icon-theme=fancy --classify'
+  alias lt='lsd --tree ${lsd_params[@]}' # Display as tree
+
+  # Declare an array for eza parameters
+  typeset -ag eza_params
+
+  # Define default eza parameters
+  eza_params=(
+    '--git' # Show git status
+    '--icons=always' # Show icons
+    '--group' # Group files by type
+    '--group-directories-first' # Group directories first
+    '--time-style=long-iso' # Use long ISO date format
+    '--color-scale=all' # Use color scale for all files
+  )
+
+  # If _EZA_PARAMS is set, override default eza parameters
+  [[ -n $_EZA_PARAMS ]] && eza_params=($_EZA_PARAMS)
+
+  alias lsg='eza --git-repos ${eza_params[@]}' # Show git repositories
+  alias llg='eza --all --header --long --git-repos ${eza_params[@]}' # Show all files, long format, with header, git repos
+  alias llmg='eza --all --header --long --git-repos --sort=modified ${eza_params[@]}' # Sort by modification time, git repos
+  alias lag='eza -lbhHigUmuSa --git-repos' # Long format, human-readable sizes, inode, group, user, git repos
+  alias lxg='eza -lbhHigUmuSa@ --git-repos' # Same as lag, but with extended attributes
+
+# Check if lsd alone is available
+elif command -v lsd > /dev/null 2>&1 && ! command -v eza > /dev/null 2>&1; then
+
+  # Declare an array for lsd parameters
+  typeset -ag lsd_params
+
+  # Define default lsd parameters
+  lsd_params=(
+    '--group-directories-first' # Group directories first
+    '--color=always' # Always use colored output
+    '--icon=always' # Always show icons
+    '--date=date' # Use long date format
+    '--blocks=permission,user,group,size,date,name' # Display these blocks of information
+  )
+
+  # If _LSD_PARAMS is set, override default lsd parameters
+  [[ -n $_LSD_PARAMS ]] && lsd_params=($_LSD_PARAMS)
+
+  # Define aliases for lsd with the specified parameters
+  alias ls='lsd ${lsd_params[@]}'
+  alias l='lsd --ignore-glob ${lsd_params[@]}' # Ignore glob patterns
+  alias ll='lsd --all --long --header ${lsd_params[@]}' # Show all files, long format, with header
+  alias llm='lsd --all --long --header --sort=modified ${lsd_params[@]}' # Sort by modification time
+	alias la='lsd -l --all --human-readable --inode --group-dirs first --icon=always --icon-theme=fancy'
+	alias lx='lsd -l --all --human-readable --inode --group-dirs first --icon=always --icon-theme=fancy --classify'
+  alias lt='lsd --tree ${lsd_params[@]}' # Display as tree
+
+# Check if eza alone is available
+elif ! command -v lsd > /dev/null 2>&1 && command -v eza > /dev/null 2>&1; then
+
+  # Declare an array for eza parameters
+  typeset -ag eza_params
+
+  # Define default eza parameters
+  eza_params=(
+    '--git' # Show git status
+    '--icons=always' # Show icons
+    '--group' # Group files by type
+    '--group-directories-first' # Group directories first
+    '--time-style=long-iso' # Use long ISO date format
+    '--color-scale=all' # Use color scale for all files
+  )
+
+  # If _EZA_PARAMS is set, override default eza parameters
+  [[ -n $_EZA_PARAMS ]] && eza_params=($_EZA_PARAMS)
+
+  # Define aliases for eza with the specified parameters
+  alias ls='eza ${eza_params[@]}'
+  alias l='eza --git-ignore ${eza_params[@]}' # Ignore git ignored files
+  alias ll='eza --all --header --long ${eza_params[@]}' # Show all files, long format, with header
+  alias llm='eza --all --header --long --sort=modified ${eza_params[@]}' # Sort by modification time
+  alias la='eza -lbhHigUmuSa' # Long format, human-readable sizes, inode, group, user, etc.
+  alias lx='eza -lbhHigUmuSa@' # Same as la, but with extended attributes
+  alias lt='eza --tree ${eza_params[@]}' # Display as tree
+  alias lsg='eza --git-repos ${eza_params[@]}' # Show git repositories
+  alias llg='eza --all --header --long --git-repos ${eza_params[@]}' # Show all files, long format, with header, git repos
+  alias llmg='eza --all --header --long --git-repos --sort=modified ${eza_params[@]}' # Sort by modification time, git repos
+  alias lag='eza -lbhHigUmuSa --git-repos' # Long format, human-readable sizes, inode, group, user, git repos
+  alias lxg='eza -lbhHigUmuSa@ --git-repos' # Same as lag, but with extended attributes
+
+# Fallback to ls with colored output
+else
+
+  # Define aliases for ls with colored output
+  alias ls='ls --color=auto' # Automatically use colored output
+  alias l='ls --color=auto -l' # Long format with colored output
+  alias ll='ls --color=auto -la' # Show all files, long format, with colored output
+  alias la='ls --color=auto -la' # Show all files, long format, with colored output
+  alias lx='ls --color=auto -lX' # Long format, sort by extension, with colored output
+  alias lt='ls --color=auto -lt' # Long format, sort by modification time, with colored output
+  alias tree='ls --color=auto -R' # Recursive listing with colored output
+
+fi
+### END of LSD -> EZA -> LS block
+
+# Alias Script for Linux Power Users - Created by ChatGPT (Your AI Assistant)
+# --------------------------------------------------------------
+# A collection of useful aliases for system administration, networking, and monitoring.
+# These aliases are designed for efficiency and troubleshooting.
+# --------------------------------------------------------------
+
+### NETSTAT ALIASES ###
+
+# Alias for checking open listening ports
+# Useful for finding services running on a machine.
+alias netlist='netstat -tuln'
+# Example: netlist
+
+# Alias for showing all active TCP/UDP connections
+# Useful for diagnosing network connections.
+alias netall='netstat -atun'
+# Example: netall
+
+# Alias for detailed network interface statistics
+# Useful to monitor packet transmission and errors.
+alias netstatiface='netstat -i'
+# Example: netstatiface
+
+# Alias for showing network routing table
+# Useful for understanding routing behavior of the system.
+alias netroute='netstat -rn'
+# Example: netroute
+
+### SS (Socket Stat) ALIASES ###
+
+# Alias for showing all listening sockets
+alias ssa="ss -tulnep"
+
+# Alias for displaying all TCP connections (ss is faster than netstat)
+# Useful for quickly analyzing active connections.
+alias ss_tcp='ss -t -a'
+# Example: ss_tcp
+
+# Alias for displaying all UDP connections
+# Useful for troubleshooting UDP-based services.
+alias ss_udp='ss -u -a'
+# Example: ss_udp
+
+# Alias for showing all connections with detailed info (including process)
+# Useful for troubleshooting network services and finding which process is using a port.
+alias ss_detail='ss -tunap'
+# Example: ss_detail
+
+# Alias for showing listening sockets
+# Useful for checking services that are accepting connections.
+alias ss_listen='ss -ltn'
+# Example: ss_listen
+
+### PS (Process Status) ALIASES ###
+
+alias psa='ps aux'
+
+# Alias for displaying the top 10 CPU-consuming processes
+# Useful for finding processes consuming too much CPU.
+alias pscpu='ps aux --sort=-%cpu | head -n 11'
+# Example: pscpu
+
+# Alias for displaying the top 10 memory-consuming processes
+# Useful for finding processes consuming too much memory.
+alias psmem='ps aux --sort=-%mem | head -n 11'
+# Example: psmem
+
+# Alias for displaying all processes in a tree format
+# Useful for visualizing parent-child relationships between processes.
+alias pstree='ps -ejH'
+# Example: pstree
+
+# Alias for displaying processes of a specific user
+# Useful for monitoring what processes a particular user is running.
+alias psuser='ps -u $USER'
+# Example: psuser
+
+### NMAP ALIASES ###
+
+# Alias for performing a quick scan of open ports on a specific host
+# Useful for fast discovery of open ports.
+alias nmapquick='nmap -T4 -F'
+# Example: nmapquick 192.168.1.1
+
+# Alias for scanning all TCP ports on a host
+# Useful for a complete scan of services on a host.
+alias nmaptcp='nmap -p-'
+# Example: nmaptcp 192.168.1.1
+
+# Alias for a ping scan to discover active hosts on a network
+# Useful for finding live systems on a network.
+alias nmapping='nmap -sn'
+# Example: nmapping 192.168.1.0/24
+
+# Alias for scanning open ports with service version detection
+# Useful for finding versions of services running on open ports.
+alias nmapver='nmap -sV'
+# Example: nmapver 192.168.1.1
+
+# Alias for scanning and discovering network vulnerabilities (using default scripts)
+# Useful for quickly checking for known vulnerabilities.
+alias nmapvuln='nmap --script=vuln'
+# Example: nmapvuln 192.168.1.1
+
+### SAR (System Activity Report) ALIASES ###
+
+# Alias for displaying CPU usage stats
+# Useful for monitoring CPU performance over time.
+alias sarcpu='sar -u 1 5'
+# Example: sarcpu
+
+# Alias for displaying memory usage stats
+# Useful for monitoring memory performance and swap usage.
+alias sarmem='sar -r 1 5'
+# Example: sarmem
+
+# Alias for displaying network I/O stats
+# Useful for monitoring incoming and outgoing network traffic.
+alias sarnet='sar -n DEV 1 5'
+# Example: sarnet
+
+# Alias for displaying disk I/O stats
+# Useful for monitoring disk read/write operations.
+alias sardisk='sar -d 1 5'
+# Example: sardisk
+
+# Alias for a summary of load average (over 1, 5, 15 mins)
+# Useful for detecting overall system load.
+alias sarload='sar -q 1 5'
+# Example: sarload
+
+
+# 1. SSH ALIASES
+
+# Alias for quick SSH login to a remote host
+alias sshlogin='ssh -o ConnectTimeout=5 -o ServerAliveInterval=30'
+# Example: sshlogin user@hostname
+# Explanation: This alias sets a 5-second connection timeout and keeps the session alive with pings every 30 seconds.
+
+# Alias for SSH tunneling
+alias sshtunnel='ssh -fNL'
+# Example: sshtunnel 9999:localhost:22 user@hostname
+# Explanation: Creates an SSH tunnel, forwarding port 9999 on your local machine to port 22 on the remote machine.
+
+
+# 6. NETWORK MONITORING ALIASES
+
+unalias ping &>/dev/null # restore original ping (ohmyzsh override)
+
+# Alias for checking open ports with netstat
+alias netopen='netstat -tuln'
+# Example: netopen
+# Explanation: Displays open ports and the services that are listening on them.
+
+# Alias for listing active connections
+alias netcon='ss -tunap'
+# Example: netcon
+# Explanation: Shows all active TCP/UDP connections along with associated processes.
+
+# Alias for performing a ping test
+alias pingtest='ping -c 5'
+# Example: pingtest google.com
+# Explanation: Pings a host 5 times and returns the results.
+
+# Alias for a simple ping with a defined count (default is 5 packets)
+# This is useful to avoid continuous pinging and to stop after 5 packets.
+alias ping5='ping -c 5'
+# Example: ping5 google.com
+
+# Alias for a continuous ping with detailed timestamp on each packet
+# This is useful for seeing exactly when packets are sent and received, helping to identify time delays.
+alias pingtime='ping -D -O'
+# Example: pingtime google.com
+
+# Alias for pinging with a short interval between packets (default 0.2 seconds)
+# Useful for testing rapid response times or packet drops under stress.
+alias pingspeed='ping -i 0.2'
+# Example: pingspeed google.com
+
+# Alias for checking ping without DNS resolution (for faster results and no DNS dependency)
+# Useful for troubleshooting routing issues where DNS might be a problem.
+alias pingnodns='ping -n'
+# Example: pingnodns 8.8.8.8
+
+# Alias for flooding a target with packets (for high-speed stress testing)
+# Caution: Use carefully and only with permission, as this can cause network strain.
+alias pingflood='ping -f'
+# Example: pingflood google.com
+
+# Alias for a long-term ping with an interval of 60 seconds between each packet
+# This is useful for checking stability over a longer period without generating too much traffic.
+alias pinglong='ping -i 60'
+# Example: pinglong google.com
+
+# Alias for pinging with a specific packet size (default 100 bytes)
+# Useful to test the effect of different packet sizes on network performance.
+alias pingbig='ping -s 100'
+# Example: pingbig google.com
+
+# Alias for checking the maximum transmission unit (MTU) to detect fragmentation issues
+# Useful for diagnosing network MTU problems.
+alias pingmtu='ping -M do -s 1472'
+# Example: pingmtu google.com
+
+# Alias for detailed output including packet loss, latency, and statistics at the end
+# This helps summarize results and see if packets were dropped.
+alias pingstats='ping -A'
+# Example: pingstats google.com
+
+# Alias for IPv6 pinging
+# Useful when working in environments where IPv6 is preferred or used.
+alias ping6='ping -6'
+# Example: ping6 ipv6.google.com
+
+# 7. NMAP ALIASES
+
+# Alias for a quick scan of a host
+alias quicknmap='nmap -T4 -F'
+# Example: quicknmap 192.168.1.1
+# Explanation: Performs a fast scan of the target host's open ports.
+
+# Alias for scanning all ports on a host
+alias fullnmap='nmap -p-'
+# Example: fullnmap 192.168.1.1
+# Explanation: Scans all 65535 ports on a host.
+
+# 8. PROCESS MONITORING ALIASES
+
+# Alias for checking CPU usage
+alias topcpu='ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head -n 10'
+# Example: topcpu
+# Explanation: Shows the top 10 processes by CPU usage.
+
+# Alias for checking memory usage
+alias topmem='ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head -n 10'
+# Example: topmem
+# Explanation: Shows the top 10 processes by memory usage.
+
+# Alias for listing all processes in a tree format
+alias ptree='ps auxf'
+# Example: ptree
+# Explanation: Lists all processes in a tree format to show parent-child relationships.
+
+# 9. SYSTEM MONITORING (SAR)
+
+# Alias for viewing CPU performance statistics
+alias sarcpu='sar -u 1 5'
+# Example: sarcpu
+# Explanation: Displays CPU usage statistics every second for 5 seconds.
+
+# Alias for memory performance statistics
+alias sarmem='sar -r 1 5'
+# Example: sarmem
+# Explanation: Displays memory usage statistics every second for 5 seconds.
+
+# Alias for real-time network traffic statistics
+alias sarnet='sar -n DEV 1 5'
+# Example: sarnet
+# Explanation: Displays network traffic statistics for each interface.
+
+# Alias for disk I/O statistics
+alias sardisk='sar -d 1 5'
+# Example: sardisk
+# Explanation: Displays disk read/write operations.
+
+# last. [rip]grepping the above
+
+alias psag="psa | grep"
+alias psar="psa | rg"
+alias ssag="ssa | grep"
+alias ssar="ssa | rg"
+
+# Lazydocker
+if command -v lazydocker > /dev/null 2>&1; then
+	alias lzd='lazydocker'
+fi
+
+# Navi
+if command -v navi > /dev/null 2>&1; then
+	alias naviq='navi --query'
+	alias navit='navi --tldr'
+	alias navic='navi --cheatsh'
+fi
+### END OF ALIASES ###
+
+# Intune Portal cleanup
+alias Microsoft-Intune-Cleanup="rm -rfv .local/share/{intune-portal} .local/state/{intune,microsoft-identity-broker} .config/intune .cache/intune-portal .cache/microsoft-edge .cache/Microsoft"
+
+# Ptyxis terminal new session
+alias ptyxis='flatpak run app.devsuite.Ptyxis -s'
+# Ptyxis terminal new container tab
+alias ptyxist='flatpak run app.devsuite.Ptyxis --tab'
+# Run command in Ptyxis
+alias ptyxisr='flatpak run app.devsuite.Ptyxis --title 'Launch' -s -x'
+
+
+### SGPT block
+# These are some bash aliases and functions to make you more productive in your daily work.
+
+## git summarize ##
+# Leverage SGPT to produce intelligent and context-sensitive git commit messages.
+# By providing one argument, you can define the type of semantic commit (e.g. feat, fix, chore).
+# When supplying two arguments, the second parameter allows you to include more details for a more explicit prompt.
+gsum() {
+    if [ $# -eq 2 ]; then
+        query="Generate git commit message using semantic versioning. Declare commit message as $1. $2. My changes: $(git diff)"
+    elif [ $# -eq 1 ]; then
+        query="Generate git commit message using semantic versioning. Declare commit message as $1. My changes: $(git diff)"
+    else
+        query="Generate git commit message using semantic versioning. My changes: $(git diff)"
+    fi
+    commit_message="$(sgpt txt "$query")"
+    printf "%s\n" "$commit_message"
+    read -rp "Do you want to commit your changes with this commit message? [y/N] " response
+    if [[ $response =~ ^[Yy]$ ]]; then
+        git add . && git commit -m "$commit_message"
+    else
+        echo "Commit cancelled."
+    fi
+}
+
+# Create a alias for access to the GPT-4 Vision API
+alias vision='sgpt --model "gpt-4-vision"'
+
+# Create a alias for access to OpenAI's o1
+alias sgpto1="sgpt --model \"o1\""
+### end of SFPT block
+
+### Power management block
+if command -v cpupower &>/dev/null; then
+		# Set CPU governor to performance
+		alias cpuperf='sudo cpupower frequency-set --governor performance --max 5Ghz'
+		# Set CPU governor to powersave
+		alias cpusave='sudo cpupower frequency-set --governor powersave --max 3.7Ghz'
+fi
+if command -v watch &>/dev/null; then
+		# Watch CPU frequency
+		alias watchcpu='watch -n.1 "grep \"^[c]pu MHz\" /proc/cpuinfo"'
+		alias watchtemp='watch -n.1 "sensors"'
+fi
+
+### jrnl block
+if command -v jrnl &>/dev/null; then
+	alias jrnl=" jrnl"
+fi
+### end of jrnl block
+ZSH_DEBUG_LOG_ENDFILE "${(%):-%N}"

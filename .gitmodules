@@ -1,0 +1,38 @@
+[submodule ".config/ansible"]
+	path = .config/ansible
+	url  = git@github.com:Alby11/ansible.git
+
+[submodule ".config/nvim"]
+	path = .config/nvim
+	url  = git@github.com:Alby11/AstroNvim.git
+
+[submodule ".config/remmina"]
+	path = .config/remmina
+	url  = git@github.com:Alby11/remmina_config.git
+
+[submodule ".config/yazi"]
+	path = .config/yazi
+	url  = git@github.com:Alby11/dotfiles-yazi.git
+
+[submodule ".config/zsh/catppuccin_zsh-syntax-highlighting"]
+	path = .config/zsh/catppuccin_zsh-syntax-highlighting
+	url = git@github.com:catppuccin/zsh-syntax-highlighting
+
+[submodule ".config/tmux"]
+	path = .config/tmux
+	url  = git@github.com:Alby11/dotfiles-tmux.git
+
+[submodule ".config/zsh/functions"]
+	path = .config/zsh/functions
+	url = git@github.com:Alby11/zsh_functions
+
+[submodule ".config/zsh/scripts"]
+	path = .config/zsh/scripts
+	url = git@github.com:Alby11/zsh_scripts
+
+[submodule ".config/bat/syntaxes/sublime-purescript-syntax"]
+	path = .config/bat/syntaxes/sublime-purescript-syntax
+	url  = git@github.com:tellnobody1/sublime-purescript-syntax.git
+[submodule ".config/zsh/.antidote"]
+	path = .config/zsh/.antidote
+	url = git@github.com:mattmc3/antidote.git

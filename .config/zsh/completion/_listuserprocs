@@ -1,0 +1,24 @@
+# vim: filetype=zsh
+
+# Autocomplete script for listuserprocs
+_listuserprocs() {
+  _arguments '1: :(_active_users)' '*: :->default'
+
+  case $state in
+    default)
+      _message 'no more arguments'
+      ;;
+  esac
+}
+
+# Function to generate a list of users with at least one running process
+_active_users() {
+  users_with_procs=$(ps -eo user= | sort | uniq)
+  _wanted users expl 'user with running process' compadd $users_with_procs
+}
+
+# Attach the completion function to listuserprocs
+compdef _listuserprocs listuserprocs
+
+
+

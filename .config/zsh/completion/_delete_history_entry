@@ -1,0 +1,11 @@
+#!/usr/bin/env zsh
+
+# Autocomplete function for delete_history_entry
+_delete_history_entry() {
+    local -a history_lines
+    history_lines=("${(@f)$(fc -l)}")
+    _describe 'values' history_lines
+}
+
+# Enable autocomplete for delete_history_entry
+compdef _delete_history_entry delete_history_entry
