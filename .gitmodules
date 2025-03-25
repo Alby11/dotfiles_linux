@@ -4,7 +4,7 @@
 
 [submodule ".config/nvim"]
 	path = .config/nvim
-	url  = git@github.com:Alby11/AstroNvim.git
+	url = git@github.com:Alby11/AstroNvim
 
 [submodule ".config/remmina"]
 	path = .config/remmina
@@ -20,7 +20,7 @@
 
 [submodule ".config/tmux"]
 	path = .config/tmux
-	url  = git@github.com:Alby11/dotfiles-tmux.git
+	url = git@github.com:Alby11/dotfiles_tmux
 
 [submodule ".config/zsh/functions"]
 	path = .config/zsh/functions
