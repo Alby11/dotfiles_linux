@@ -1,0 +1,154 @@
+#!/bin/zsh
+
+helpMessage=$(
+    cat <<EOS
+dotfiles2git v0.0.1\n
+Alberto Tallone <@gmail.com>\n
+A convenient dotfiles management system\n
+\n
+USAGE:\n
+\tdotfiles2git <SUBCOMMAND>\n
+\n
+OPTIONS:\n
+\t--help\t\tPrint help information\n
+\t--version\tPrint version information\n
+\n
+SUBCOMMANDS:\n
+\tstatus\t\tcheck repo status\n
+\tadd <FILE>  \tadd file to repo\n
+\taddall      \t\tadd modified files that are already tracked\n
+\trm          \t\tremove file from repo\n
+\tcommit      \t\tcommit changes\n
+\tpush        \t\tpush file to remote\n
+\tpull        \t\tpull file from remote\n
+\tsubupdate   \t\tupdate submodules from remote\n
+\tsync        \t\tsync repo (status, addall, push\n
+EOS
+)
+
+curDir=$(pwd)
+paramSubCmd=$2
+commitDate="$(date +%Y%m%d_%H:%M:%S)"
+
+export function dotfiles () {
+    git --git-dir=$HOME/.dotfiles_git/ --work-tree=$HOME $@
+}
+
+# Define the completion function
+_dotfiles() {
+  # Load the completion function for git
+  _git
+  # Call the completion function for git
+  _git "$@"
+}
+# Associate the completion function with the dotfiles and dotcommand
+autoload -Uz compinit && compinit
+compdef _dotfiles dotfiles
+compdef _dotfiles dot
+
+dotfilesStatus() {
+    dotfiles status
+}
+
+dotfilesAdd() {
+    dotfiles add $paramSubCmd
+}
+
+dotfilesAddall() {
+    dotfiles add -u
+}
+
+dotfilesRm() {
+    dotfiles rm $paramSubCmd
+}
+
+dotfilesCommit() {
+    dotfiles commit -m $commitDate
+}
+
+dotfilesPush() {
+    dotfiles push -v
+}
+
+dotfilesPull() {
+    dotfiles pull -v
+}
+
+dotfilesSubupdate() {
+    dotfiles submodule update --remote --checkout --recursive
+}
+
+dotfilesSync() {
+    dotfilesStatus
+    dotfilesAddall
+    dotfilesCommit
+    dotfilesPush
+}
+
+cd $HOME
+
+case "$1" in
+    "status")
+        dotfilesStatus
+        ;;
+
+    "add")
+        dotfilesAdd
+        ;;
+
+    "addall")
+        dotfilesAddall
+        ;;
+
+    "rm")
+        dotfilesRm
+        ;;
+
+    "commit")
+        dotfilesCommit
+        ;;
+
+    "push")
+        dotfilesPush
+        ;;
+
+    "pull")
+        dotfilesPull
+        ;;
+
+    "subupdate")
+        dotfilesSubupdate
+        ;;
+
+    "sync")
+        dotfilesSync
+        ;;
+
+    "syncsub")
+        dotfilesSubupdate
+        dotfilesSync
+        ;;
+
+    "--version")
+        echo $helpMessage | head -n 1
+        ;;
+
+    *)
+        echo $helpMessage
+        ;;
+
+esac
+
+cd $curDir
+
+unset helpMessage
+unset curDir
+unset paramSubCmd
+
+unset -f dotfilesStatus
+unset -f dotfilesAdd
+unset -f dotfilesAddall
+unset -f dotfilesRm
+unset -f dotfilesCommit
+unset -f dotfilesPush
+unset -f dotfilesPull
