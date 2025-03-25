@@ -1,0 +1,19 @@
+vsync = true
+maximized = false
+srgb = true
+idle = false
+no-multigrid = true
+neovim_bin = "~/.local/share/bob/nvim-bin/nvim"
+frame = "full"
+fork = false
+mouse-cursor-icon = "arrow"
+tabs = true
+theme = "dark"
+title-hidden = true
+wsl = false
+
+[font]
+normal = "JetBrainsMono Nerd Font Mono" # Will use the bundled Fira Code Nerd Font by default
+size = 10.0
+hinting = "full"
+edging = "antialias"

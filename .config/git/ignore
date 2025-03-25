@@ -1,0 +1,112 @@
+# Global Git Ignore File
+
+# Logs
+*.log
+*.sqlite
+log.txt
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+*.swn
+*.bak
+*.~*~
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.AppleDouble
+.LSOverride
+
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Build directories
+dist/
+build/
+target/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Java
+*.class
+
+# Ruby
+*.gem
+
+# Rust
+target/
+**/*.rs.bk
+**/*.rl.bk
+
+# Go
+bin/
+pkg/
+
+# Backup files
+*.backup
+*.orig
+*.ref
+*~
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.iml
+
+# Sensitive files
+*.env
+*.key
+*.pem
+*.credentials
+*.password
+*.secret
+
+# Scratch files
+.scratch/
+
+# PhpStorm HTTP Requests
+.http/
+
+# Temp files
+tmp/
+
+# Web files
+vendor/
+
+# Compressed files
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.msi
+
+# Comments explaining the purpose of each section
+# Logs: Ignore log files
+# Temporary files: Ignore temporary and swap files
+# OS-generated files: Ignore OS-specific files
+# Node.js dependencies: Ignore node_modules directory and related files
+# Build directories: Ignore build output directories
+# Language-specific: Ignore files and directories specific to various programming languages
+# Backup files: Ignore backup files created by editors
+# IDEs and editors: Ignore configuration files and directories for various IDEs and editors
+# Sensitive files: Ignore files containing sensitive information
+# Scratch files: Ignore scratch files
+# PhpStorm HTTP Requests: Ignore HTTP request files created by PhpStorm
+# Temp files: Ignore temporary files
+# Web files: Ignore web-related files
+# Compressed files: Ignore compressed files

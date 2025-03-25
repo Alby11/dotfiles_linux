@@ -1,0 +1,297 @@
+# vim: ft=toml
+
+# Alacritty Configuration File
+# Customized for use with AstroNvim and Tmux, with explanations for all options.
+
+# GENERAL CONFIGURATION
+[general]
+# Import additional configuration files or themes.
+# Paths must be absolute or relative to the user's home directory (~).
+# Imports are applied in order, with the last file overriding earlier imports.
+# Example:
+# import = ["~/.config/alacritty/base16-dark.toml", "~/.config/alacritty/keybindings.toml"]
+import = ["${HOME}/config/alacritty/catppuccin-mocha.toml"]
+
+# Enable live configuration reload. Changes will take effect without restarting.
+# Default: true
+# live_config_reload = true
+live_config_reload = true
+
+# Enable IPC socket for sending commands to Alacritty via `alacritty msg`.
+# Default: true
+# ipc_socket = true
+
+# SHELL CONFIGURATION
+[terminal.shell]
+# Shell program to launch when opening Alacritty.
+# Default (Linux/BSD/macOS): $SHELL or login shell.
+# Default (Windows): "powershell".
+program = "/usr/bin/zsh"
+
+# Arguments for the shell program.
+# Example for launching Zsh as a login shell:
+# args = ["-l"]
+args = ["--login"]
+
+# WINDOW CONFIGURATION
+[window]
+# Dimensions of the terminal in terms of columns and lines.
+# Both must be non-zero; 0 means the window manager's recommended size is used.
+# Default: { columns = 0, lines = 0 }
+# dimensions = { columns = 80, lines = 24 }
+
+# Initial position of the terminal window, specified in pixels.
+# "None" lets the window manager handle placement.
+# Default: "None"
+# position = { x = 0, y = 0 }
+
+# Blank space around the terminal in pixels.
+# Applies padding evenly on all sides. Values scale with DPI.
+# Default: { x = 0, y = 0 }
+# padding = { x = 0, y = 0 }
+
+# Spread additional padding evenly.
+# Default: false
+# dynamic_padding = false
+
+# Window decorations style.
+# Options:
+# - "Full" (default): Title bar and borders.
+# - "None": No title bar or borders.
+# - "Transparent" (macOS only): Transparent title bar and buttons.
+# - "Buttonless" (macOS only): Transparent title bar without buttons.
+decorations = "Full"
+
+# Override the theme for system decorations.
+# Options:
+# - "Dark"
+# - "Light"
+# - "None" (default): Uses the system's theme.
+decorations_theme_variant = "Dark"
+
+# Background transparency.
+# Floating-point value from 0.0 (fully transparent) to 1.0 (fully opaque).
+# Default: 1.0
+opacity = 0.80
+
+# Enable compositor to blur content behind transparent windows.
+# Only supported on macOS and KDE Wayland.
+# Default: false
+# blur = false
+
+# Startup mode.
+# Options:
+# - "Windowed" (default): Normal window.
+# - "Maximized": Maximized window on launch.
+# - "Fullscreen": Fullscreen window.
+# - "SimpleFullscreen" (macOS only): Fullscreen without occupying another space.
+# Default: "Windowed"
+# startup_mode = "Windowed"
+
+# Window title when not dynamically updated by applications.
+# Default: "Alacritty"
+title = "Alacritty"
+
+# Allow terminal applications to change the window title dynamically.
+# Default: true
+dynamic_title = true
+
+# Window resizing increments by cell dimensions.
+# Default: false
+# resize_increments = false
+
+# Alternative for Option key behavior (macOS only).
+# Options:
+# - "OnlyLeft"
+# - "OnlyRight"
+# - "Both"
+# - "None" (default)
+# option_as_alt = "None"
+
+# SCROLLBACK CONFIGURATION
+[scrolling]
+# Number of lines in the scrollback buffer.
+# Range: 0 (disabled) to 100000 (max).
+# Default: 10000
+history = 100000
+
+# Number of lines scrolled per scroll increment.
+# Default: 3
+multiplier = 3
+
+# FONT CONFIGURATION
+[font]
+# Font family and style for regular text.
+# Default: { family = "monospace", style = "Regular" } (Linux/BSD/macOS)
+normal = { family = "JetBrainsMono Nerd Font Mono", style = "ExtraLight,Regular" }
+
+# Font family and style for bold text.
+# Falls back to the regular font if family is not specified.
+bold = { family = "JetBrainsMono Nerd Font Mono", style = "ExtraBold,Regular" }
+
+# Font family and style for italic text.
+# Falls back to the regular font if family is not specified.
+italic = { family = "JetBrainsMono Nerd Font Mono", style = "ExtraLight Italic,Italic" }
+
+# Font size in points.
+# Default: 11.25
+size = 10.25
+
+# Extra spacing around each character.
+# Default: { x = 0, y = 0 }
+# offset = { x = 0, y = 0 }
+
+# Offset for glyphs within their cells.
+# Default: { x = 0, y = 0 }
+# glyph_offset = { x = 0, y = 0 }
+
+# Enable a built-in font for box-drawing characters.
+# Default: true
+# builtin_box_drawing = true
+
+# CURSOR CONFIGURATION
+[cursor]
+# Cursor style and blinking behavior.
+# Shape options:
+# - "Block" (default)
+# - "Underline"
+# - "Beam"
+# Blinking options:
+# - "Never"
+# - "Off" (default)
+# - "On"
+# - "Always"
+style = { shape = "Underline", blinking = "On" }
+
+# Cursor style for vi mode.
+# Falls back to the normal cursor if "None".
+# Default: "None"
+vi_mode_style = { shape = "Block", blinking = "On" }
+
+# Cursor blinking interval in milliseconds.
+# Default: 750
+blink_interval = 500
+
+# Time after which the cursor stops blinking, in seconds.
+# 0 disables the timeout.
+# Default: 5
+blink_timeout = 2
+
+# Render a hollow cursor when the window is unfocused.
+# Default: true
+unfocused_hollow = true
+
+# Cursor thickness as a fraction of the cell width (0.0 to 1.0).
+# Default: 0.15
+thickness = 0.10
+
+# SELECTION CONFIGURATION
+[selection]
+# Automatically save selected text to the clipboard.
+# Default: false
+save_to_clipboard = true
+
+# BELL CONFIGURATION
+[bell]
+# Visual bell duration in milliseconds.
+# 0 disables the visual bell.
+# Default: 0
+duration = 1000
+
+# Visual bell color.
+# Default: "#ffffff"
+color = "#a6e3a1"
+
+# KEYBOARD
+# This section documents the [keyboard] table of the configuration file.
+# render_timer = false
+
+# bindings = [{ <key>, <mods>, <mode>, <action> | <chars> },]
+
+# To unset a default binding, you can use the action "ReceiveChar" to remove it or "None" to inhibit any action.
+# Multiple keybindings can be triggered by a single key press and will be executed in the order they are defined in.
+
+# key = "<string>"
+
+# The regular keys like "A", "0", and "Я" can be mapped directly without any special syntax. Full list of named keys like "F1" and the syntax for dead keys can be found here:
+
+# https://docs.rs/winit/latest/winit/keyboard/enum.NamedKey.html
+# https://docs.rs/winit/latest/winit/keyboard/enum.Key.html#variant.Dead
+
+# Numpad keys are prefixed by Numpad: "NumpadEnter" | "NumpadAdd" | "NumpadComma" | "NumpadDivide" | "NumpadEquals" | "NumpadSubtract" | "NumpadMultiply" | "Numpad[0-9]".
+# The key field also supports using scancodes, which are specified as a decimal number.
+
+# mods = "Command" | "Control" | "Option" | "Super" | "Shift" | "Alt"
+# Multiple modifiers can be combined using |, like this: "Control | Shift".
+
+# mode = "AppCursor" | "AppKeypad" | "Search" | "Alt" | "Vi"
+# This defines a terminal mode which must be active for this binding to have an effect.
+# Prepending ~ to a mode will require the mode to not be active for the binding to take effect.
+# Multiple modes can be combined using |, like this: "~Vi|Search".
+
+# chars = "<string>"
+# Writes the specified string to the terminal.
+# Default: See alacritty-bindings(5)
+
+# Example:
+# [keyboard]
+# bindings = [
+# { key = "N", mods = "Control|Shift", action = "CreateNewWindow" },
+# { key = "L", mods = "Control|Shift", chars = "l" },
+# ]
+
+[keyboard]
+bindings = [
+  # Copy selected text to the clipboard (Ctrl+Shift+C).
+  { key = "C", mods = "Control|Shift", action = "Copy" },
+
+  # Paste from the clipboard (Ctrl+Shift+V).
+  { key = "V", mods = "Control|Shift", action = "Paste" },
+
+  # Increase font size (Ctrl+Shift+Plus).
+  { key = "+", mods = "Control", action = "IncreaseFontSize" },
+
+  # Decrease font size (Ctrl+Alt+Minus).
+  { key = "-", mods = "Control", action = "DecreaseFontSize" },
+
+  # Reset font size to the config value (Ctrl+Alt+0).
+  { key = "0", mods = "Control", action = "ResetFontSize" },
+
+  # Increase opacity (Ctrl+Shift+Plus).
+  # { key = "+", mods = "Control|Shift", action = { program = "alacritty", args = [
+  # "msg",
+  # "config",
+  # "window.opacity=0.1",
+  # ] } },
+
+  # Decrease opacity (Ctrl+Shift+Minus).
+  # { key = "-", mods = "Control|Shift", action = { program = "$ZDOTDIR/functions/adjust_alacritty_opacity", args = [
+  # "down",
+  # ] } },
+
+  # Reset opacity (Ctrl+Shift+0).
+  # { key = "0", mods = "Control|Shift", action = { program = "$ZDOTDIR/functions/adjust_alacritty_opacity", args = [
+  # "reset",
+  # ] } },
+]
+
+# DEBUG OPTIONS
+[debug]
+# Log frame rendering times for debugging performance.
+# Default: false
+# render_timer = false
+
+# Keep log files after quitting Alacritty.
+# Default: false
+# persistent_logging = false
+
+# Set the logging level.
+# Options:
+# - "Off"
+# - "Error"
+# - "Warn" (default)
+# - "Info"
+# - "Debug"
+# - "Trace"
+# log_level = "Warn"
+log_level = "Off"

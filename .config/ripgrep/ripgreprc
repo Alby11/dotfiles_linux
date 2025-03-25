@@ -1,0 +1,37 @@
+# vim: ft=ripgreprc
+
+# Show 1 line of context around each match (the line with the match, plus one line before and after).
+# --context=1
+
+# Only print the paths with matched files, not the matched lines.
+# --files
+
+# Follow symbolic links while searching.
+# --follow
+
+# Include hidden files and directories in the search.
+# --hidden
+
+# Do not respect version control system (VCS) ignore files (.gitignore, .ignore, etc.).
+--no-ignore-vcs
+
+# Enable color output if the output is a terminal.
+--color=auto
+
+# Alias for --color=always --heading --line-number, which enables colored output, prints the file heading, and line numbers for matches.
+# --pretty
+
+# Override -i/--ignore-case if the search pattern contains an uppercase letter (smart case search).
+--smart-case
+
+# Sort results by file path.
+--sort=path
+
+# Output in a format that is compatible with Vim's built-in grep/search commands.
+--vimgrep
+
+# Print the path with the matched lines.
+--with-filename
+
+# Use the PCRE2 regex engine instead of Rust's regex engine
+--pcre2

@@ -1,0 +1,11 @@
+{
+  "description": "Defined Parent directory for git directory.",
+  "dirs": [
+    "~",
+    "~/.dotfiles_git",
+    "~/.fzf",
+    "~/project",
+    "~/gitdepot/profileFiles",
+    "~/.config/nvim"
+  ]
+}
