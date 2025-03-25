@@ -8,7 +8,7 @@
 
 [submodule ".config/remmina"]
 	path = .config/remmina
-	url  = git@github.com:Alby11/remmina_config.git
+	url = git@github.com:Alby11/remmina_config.git
 
 [submodule ".config/yazi"]
 	path = .config/yazi
