@@ -1,0 +1,52 @@
+name: Dotfiles Security Scan
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: "0 6 * * 1" # Weekly scan every Monday at 6 AM UTC
+
+jobs:
+  security_scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch entire history for accurate scanning
+
+      # - name: Ensure BASE and HEAD are different
+      #   run: |
+      #     if [ "$BASE" == "$HEAD" ]; then
+      #       echo "BASE and HEAD commits are the same. Skipping scan."
+      #       exit 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Run TruffleHog
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: "."
+          base: "main"
+          head: "HEAD"
+          extra_args: "--json" # --entropy=False"
+
+      - name: Run CodeQL Analysis
+        uses: github/codeql-action/init@v3
+        with:
+          languages: "python,javascript-typescript,go,c-cpp"
+          queries: security-extended,security-and-quality
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:dotfiles"
